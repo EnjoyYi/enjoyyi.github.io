@@ -1,570 +1,811 @@
-<!DOCTYPE HTML>
-<html lang="en">
-<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0016)https://enjoyyi.github.io -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="author" content="Yi Jiang">
+    <meta name="keywords" content="Yi Jiang, Yi Jiang Bytedance, Yi Jiang TikTok, Yi Jiang GenAI">
+    <meta name="robots" content="index,follow">
+    <meta name="description" content="Homepage of Yi Jiang, Computer Vision researcher in Bytedance.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yi Jiang - Homepage</title>
+    <link href="./Yi Jiang - Homepage_files/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        var asciidoc = {  // Namespace.
 
-  <title>Yi Jiang</title>
-  
-  <meta name="author" content="Yi Jiang">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <link rel="stylesheet" type="text/css" href="stylesheet.css">
-  <link rel="icon" type="image/png" href="images/seal_icon.png">
+            /////////////////////////////////////////////////////////////////////
+            // Table Of Contents generator
+            /////////////////////////////////////////////////////////////////////
+
+            /* Author: Mihai Bazon, September 2002
+             * http://students.infoiasi.ro/~mishoo
+             *
+             * Table Of Content generator
+             * Version: 0.4
+             *
+             * Feel free to use this script under the terms of the GNU General Public
+             * License, as long as you do not remove or alter this notice.
+             */
+
+            /* modified by Troy D. Hanson, September 2006. License: GPL */
+            /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+            // toclevels = 1..4.
+            toc: function (toclevels) {
+
+                function getText(el) {
+                    var text = "";
+                    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+                        if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+                            text += i.data;
+                        else if (i.firstChild != null)
+                            text += getText(i);
+                    }
+                    return text;
+                }
+
+                function TocEntry(el, text, toclevel) {
+                    this.element = el;
+                    this.text = text;
+                    this.toclevel = toclevel;
+                }
+
+                function tocEntries(el, toclevels) {
+                    var result = new Array;
+                    var re = new RegExp('[hH]([1-' + (toclevels + 1) + '])');
+                    // Function that scans the DOM tree for header elements (the DOM2
+                    // nodeIterator API would be a better technique but not supported by all
+                    // browsers).
+                    var iterate = function (el) {
+                        for (var i = el.firstChild; i != null; i = i.nextSibling) {
+                            if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+                                var mo = re.exec(i.tagName);
+                                if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+                                    result[result.length] = new TocEntry(i, getText(i), mo[1] - 1);
+                                }
+                                iterate(i);
+                            }
+                        }
+                    }
+                    iterate(el);
+                    return result;
+                }
+
+                var toc = document.getElementById("toc");
+                if (!toc) {
+                    return;
+                }
+
+                // Delete existing TOC entries in case we're reloading the TOC.
+                var tocEntriesToRemove = [];
+                var i;
+                for (i = 0; i < toc.childNodes.length; i++) {
+                    var entry = toc.childNodes[i];
+                    if (entry.nodeName.toLowerCase() == 'div'
+                        && entry.getAttribute("class")
+                        && entry.getAttribute("class").match(/^toclevel/))
+                        tocEntriesToRemove.push(entry);
+                }
+                for (i = 0; i < tocEntriesToRemove.length; i++) {
+                    toc.removeChild(tocEntriesToRemove[i]);
+                }
+
+                // Rebuild TOC entries.
+                var entries = tocEntries(document.getElementById("content"), toclevels);
+                for (var i = 0; i < entries.length; ++i) {
+                    var entry = entries[i];
+                    if (entry.element.id == "")
+                        entry.element.id = "_toc_" + i;
+                    var a = document.createElement("a");
+                    a.href = "#" + entry.element.id;
+                    a.appendChild(document.createTextNode(entry.text));
+                    var div = document.createElement("div");
+                    div.appendChild(a);
+                    div.className = "toclevel" + entry.toclevel;
+                    toc.appendChild(div);
+                }
+                if (entries.length == 0)
+                    toc.parentNode.removeChild(toc);
+            },
+
+
+            /////////////////////////////////////////////////////////////////////
+            // Footnotes generator
+            /////////////////////////////////////////////////////////////////////
+
+            /* Based on footnote generation code from:
+             * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+             */
+
+            footnotes: function () {
+                // Delete existing footnote entries in case we're reloading the footnodes.
+                var i;
+                var noteholder = document.getElementById("footnotes");
+                if (!noteholder) {
+                    return;
+                }
+                var entriesToRemove = [];
+                for (i = 0; i < noteholder.childNodes.length; i++) {
+                    var entry = noteholder.childNodes[i];
+                    if (entry.nodeName.toLowerCase() == 'div' && entry.getAttribute("class") == "footnote")
+                        entriesToRemove.push(entry);
+                }
+                for (i = 0; i < entriesToRemove.length; i++) {
+                    noteholder.removeChild(entriesToRemove[i]);
+                }
+
+                // Rebuild footnote entries.
+                var cont = document.getElementById("content");
+                var spans = cont.getElementsByTagName("span");
+                var refs = {};
+                var n = 0;
+                for (i = 0; i < spans.length; i++) {
+                    if (spans[i].className == "footnote") {
+                        n++;
+                        var note = spans[i].getAttribute("data-note");
+                        if (!note) {
+                            // Use [\s\S] in place of . so multi-line matches work.
+                            // Because JavaScript has no s (dotall) regex flag.
+                            note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+                            spans[i].innerHTML =
+                                "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+                                "' title='View footnote' class='footnote'>" + n + "</a>]";
+                            spans[i].setAttribute("data-note", note);
+                        }
+                        noteholder.innerHTML +=
+                            "<div class='footnote' id='_footnote_" + n + "'>" +
+                            "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+                            n + "</a>. " + note + "</div>";
+                        var id = spans[i].getAttribute("id");
+                        if (id != null) refs["#" + id] = n;
+                    }
+                }
+                if (n == 0)
+                    noteholder.parentNode.removeChild(noteholder);
+                else {
+                    // Process footnoterefs.
+                    for (i = 0; i < spans.length; i++) {
+                        if (spans[i].className == "footnoteref") {
+                            var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+                            href = href.match(/#.*/)[0];  // Because IE return full URL.
+                            n = refs[href];
+                            spans[i].innerHTML =
+                                "[<a href='#_footnote_" + n +
+                                "' title='View footnote' class='footnote'>" + n + "</a>]";
+                        }
+                    }
+                }
+            },
+
+            install: function (toclevels) {
+                var timerId;
+
+                function reinstall() {
+                    asciidoc.footnotes();
+                    if (toclevels) {
+                        asciidoc.toc(toclevels);
+                    }
+                }
+
+                function reinstallAndRemoveTimer() {
+                    clearInterval(timerId);
+                    reinstall();
+                }
+
+                timerId = setInterval(reinstall, 500);
+                if (document.addEventListener)
+                    document.addEventListener("DOMContentLoaded", reinstallAndRemoveTimer, false);
+                else
+                    window.onload = reinstallAndRemoveTimer;
+            }
+
+        }
+        asciidoc.install();
+/*]]>*/
+    </script>
 </head>
 
-<body>
-  <table style="width:100%;max-width:900px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
-    <tr style="padding:0px">
-      <td style="padding:0px">
-        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
-          <tr style="padding:0px">
-            <td style="padding:2.5%;width:63%;vertical-align:middle">
-              <p style="text-align:center">
-                <name><strong><font size="4px">Yi Jiang</font></strong></name>
-              </p>
-              <p>I am a Research Lead at Media Intelligence of ByteDance Ads Generative AI, where I work on computer vision and machine learning.
-              </p>
-              <p>
-              I got my Master's degree from the Department of Computer Science and Engineering, Zhejiang University. 
-              <p>
-                My previous research focus is on instance understanding in spatial & temporal, including <b>large scale & open-vocabulary object recognition, detection, segmentation, tracking and Pretraining</b>. Most of my works have released codes on Github, with over <b>12.0K stars</b>.
-              </p>
-              <p>
-                Recently, my research focuses on <b>visual foundation models</b>, <b>deep generative models</b>(Diffusion models and its application) and <b>large language models</b>.
-              </p>
-              <p style="text-align:center">
-                <a href="mailto:jiangyi0425@gmail.com">Email</a> &nbsp/&nbsp
-                <a href="https://scholar.google.com.hk/citations?user=6dikuoYAAAAJ&hl=en">Google Scholar</a> &nbsp/&nbsp
-                <a href="https://github.com/iFighting/">Github</a>
-              </p>
-            </td>
-            
-            <td style="padding:2.5%;width:40%;max-width:40%">
-              <a href="./photos/jiangyi.jpg"><img style="width:100%;max-width:100%" alt="profile photo" src="./photos/jiangyi.jpg" class="hoverZoomLink"></a>
-            </td>
-          </tr>
-        </tbody></table>
-        
-<p style="text-align:left"><strong><font size="4px">Research Highlight</font></strong></p> 
-		<ul>
-      <li><p style="text-align:left"><b>UNINEXT</b> accepted by CVPR'23. UNINEXT unifies 10 instance perception tasks using a single model with the same model parameters</p></li> 
-		  
-      <li><p style="text-align:left"><b>ByteTrack</b> ranks <a href="https://www.paperdigest.org/2023/01/most-influential-eccv-papers-2023-01/"; style="color: #EE7F2D;"> <b>1th of the most influential papers in ECCV 2022.</b></a> Code is available on github with 3.4k stars </p></li>
-      
-      <li><p style="text-align:left"><b>Spark</b> accepted by ICLR'23 as <b style="color: red">Spotlight. </b>Spark is the first successful BERT/MAE-style pretraining on any convolutional networks</p></li>
-      
-      <li><p style="text-align:left"><b>Unicorn</b> accepted by ECCV'22 as <b style="color: red">Oral Presentation</b> . Unicorn accomplishes the great unification of the tracking network architecture and learning paradigm</p></li>
-      
-      <li><p style="text-align:left"><b>IDOL</b> and <b>Seqformer</b> accepted by ECCV'22 as <b style="color: red">Oral Presentation</b> , serving as strong baseline for video instance segmentation</p></li> 
-      
-      <li><p style="text-align:left"><b>Sparse R-CNN</b> accepted by CVPR'21. Sparse R-CNN is integrated into several famous frameworks(Detectron2, MMDetection, PaddlePaddle)</p></li>
-    </ul>
-	 
-	<br>
+<body class="article">
+    <div id="header">
+        <h1><span style="font-family:Times;">Yi Jiang</span> </h1>
+    </div>
+    <div id="content">
+        <div id="preamble">
+            <div class="sectionbody">
+                <div class="dlist">
+                    <p>
+                        Email:&nbsp;<a href="mailto:jiangyi.0425@gmail.com">jiangyi.0425@gmail.com</a>&nbsp;<a href="mailto:jiangyi.enjoy@bytedance.com">jiangyi.enjoy@bytedance.com</a>
+                    </p>
+                    
+                    <!--<dt class="hdlist1">
+Address
+</dt>
+<dd>
+<p>
+3.48, Informatics Forum<br />
+10 Crichton Street<br />
+Edinburgh, EH8 9AB<br />
+Scotland, UK
+</p>
+</dd>-->
+                    
+                </div>
+            </div>
+        </div>
+        <div class="sect1">
+            <h2 id="Biography">Biography</h2>
+            <div class="sectionbody">
+                <div class="paragraph">
+                    <p>Currently, I am a Research Lead at ByteDance Ads GeneAI, where I work on Generative Foundation models.</p>
+                    <p>I got my Master's degree from the Department of Computer Science and Engineering, Zhejiang University.</p>
+                    <p>My previous research focus is on large scale open world visual understanding and pretraining in images & videos.</p>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="sect1">
+            <h2 id="_research_interests">Research Interests</h2>
+            <div class="sectionbody">
+                <div class="paragraph">
+                    <p>Visual Foundation Models, Generative Pretrain Models and Large Language Models.</p>
+                    <p>Unified visual generation and understanding the complex world for computer vision.</p>
+                    <p>Large-scale multi-modality generative Pretrain and Alignment.</p>
+                    <p>Open world/vocabulary Visual Recognition : Equip vision with knowledge and semantics.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sect1">
+            <h2 id="_research_Highlights">Highlights</h2>
+            <div class="sectionbody">
+                <div class="paragraph">
+
+                    <ul>
 
 
- 
- <p style="text-align:justify"><strong><font size="4px">Publications</font></strong> (* equal contribution, <sup>†</sup> corresponding author)
-		<table id="pubList" border="0" cellpadding="0" width="100%" style="border-spacing: 10 18px; line-height:16pt; border: 0px;">
+        <li><p style="text-align:left"><b>Visual AutoRegressive modeling</b>: a new visual generation Framework elevates <b style="color: red">Autoregrssive models beyond diffusion</b>, indicate scaling law in image generation.</p></li> 
+
+        <li><p style="text-align:left"><b>UNINEXT</b> unifies 10 instance perception tasks using a single model with the same model parameters</p></li> 
+              
+        <li><p style="text-align:left"><b>ByteTrack</b> ranks <a href="https://www.paperdigest.org/2023/01/most-influential-eccv-papers-2023-01/"; style="color: #EE7F2D;"> <b>1th of the most influential papers in ECCV 2022.</b></a> Code is available on github with 4.3k stars </p></li>
+          
+        <li><p style="text-align:left"><b>Unicorn</b> accepted by ECCV'22 as <b style="color: red">Oral Presentation</b> . Unicorn accomplishes the great unification of the tracking network architecture and learning paradigm</p></li>
+          
+        <li><p style="text-align:left"><b>Sparse R-CNN</b> accepted by CVPR'21. Sparse R-CNN is integrated into several famous frameworks(Detectron2, MMDetection, PaddlePaddle)</p></li>
+        </ul>
+
+                    <b style="color: red">I'm looking for self-motivated interns and full-time engineer/researcher for visual generative foundation models. Feel free to reach out if you are interested.</b>
+                    <br>
+                </div>
+            </div>
+        </div>
+
+        <div class="sect1">
+            <h2 id="_publications">
+                Publications
+                <font size="4">[<a href="http://scholar.google.com/citations?user=6dikuoYAAAAJ&amp;hl=en">Google Scholar</a>]</font>
+            </h2>
+            <div class="sectionbody">
+                <div class="paragraph">
+                    <p>(* Equal contribution, <sup>†</sup> Corresponding Author or Project Lead)</p>
+                </div>
+                <!--
+                <div class="ulist">
+                    <div class="title">Preprint</div>
+                    <ul>
+                            
+                    </ul>
+                </div>
+                -->
+                <div class="ulist">
+                    <div class="title">Conference and Preprint</div>
+                    <ul>
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2404.02905">Visual Autoregressive Modeling: Scalable Image Generation via Next-Scale Prediction</a>
+                                <br>
+                                Keyu Tian, <strong>Yi Jiang</strong><sup>†</sup>, Zehuan Yuan, Bingyue Peng, Liwei Wang
+                                <br>
+                                arXiv:2404.02905, 2024.
+                                <br>
+                                <b style="color: red">Visual AutoRegressive: a new visual generation Framework elevates GPT-style models beyond diffusion, indicate scaling law in image generation.</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2404.02905">pdf</a>&nbsp;&nbsp;<a href="https://var.vision/">Project</a>&nbsp;&nbsp;<a href="https://www.jiqizhixin.com/articles/2024-04-15-5?from=synced&keyword=VAR">Report</a>&nbsp;&nbsp;<a href="https://github.com/FoundationVision/VAR">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/foundationvision/VAR?style=social">
+                            </p>
+                        </li>
+                        
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2404.13013">Groma: Localized Visual Tokenization for Grounding Multimodal Large Language Models</a>
+                                <br>
+                                Chuofan Ma, <strong>Yi Jiang</strong><sup>†</sup>, Jiannan Wu, Zehuan Yuan, Xiaojuan Qi
+                                <br>
+                                arXiv:2404.13013, 2024.
+                                <br>
+                                <b style="color: red">A Multimodal Large Language Model (MLLM) with grounded and fine-grained visual perception ability.</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2404.13013">pdf</a>&nbsp;&nbsp;<a href="https://groma-mllm.github.io/">Project</a>&nbsp;&nbsp;<a href="https://github.com/FoundationVision/Groma">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/foundationvision/Groma?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2312.09158">General Object Foundation Model for Images and Videos at Scale</a>
+                                <br>
+                                Junfeng Wu, <strong>Yi Jiang</strong>*, Qihao Liu, Zehuan Yuan, Xiang Bai, Song Bai
+                                <br>
+                                IEEE Conference on Computer Vision and Pattern Recognition (CVPR), <b style="color: red">Highlight</b>, 2024.
+                                <br>
+                                <b style="color: red">An object-level foundation model for locating and identifying objects in images and videos.</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2312.09158">pdf</a>&nbsp;&nbsp;<a href="https://glee-vision.github.io/">Project</a>&nbsp;&nbsp;<a href="https://github.com/FoundationVision/GLEE">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/foundationvision/GLEE?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2403.10191">Generative Region-Language Pretraining for Open-Ended Object Detection</a>
+                                <br>
+                                Chuang Lin, <strong>Yi Jiang</strong><sup>†</sup>, Lizhen Qu, Zehuan Yuan, Jianfei Cai
+                                <br>
+                                IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2024.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2403.10191">pdf</a>&nbsp;&nbsp;<a href="https://github.com/FoundationVision/GenerateU">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/foundationvision/GenerateU?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2310.16667">CoDet: Co-Occurrence Guided Region-Word Alignment for Open-Vocabulary Object Detection</a>
+                                <br>
+                                Chuofan Ma, <strong>Yi Jiang</strong><sup>†</sup>, Xin Wen, Zehuan Yuan, Xiaojuan Qi
+                                <br>
+                                Neural Information Processing Systems (NeurIPS), 2023.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2310.16667">pdf</a>&nbsp;&nbsp;<a href="https://codet-ovd.github.io/">Project</a>&nbsp;&nbsp;<a href="https://github.com/CVMI-Lab/CoDet">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/CVMI-Lab/CoDet?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2312.15715">UniRef++: Segment Every Reference Object in Spatial and Temporal Spaces</a>
+                                <br>
+                                Jiannan Wu, <strong>Yi Jiang</strong>, Bin Yan, Huchuan Lu, Zehuan Yuan, Ping Luo
+                                <br>
+                                arXiv:2312.15715, 2024. Extended version of ICCV2023 UniRef
+                                <br>
+                                <a href="https://arxiv.org/pdf/2312.15715">pdf</a>&nbsp;&nbsp;<a href="https://github.com/FoundationVision/UniRef">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/FoundationVision/UniRef?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2311.01373">Recognize Any Regions</a>
+                                <br>
+                                Haosen Yang, Chuofan Ma, Bin Wen, <strong>Yi Jiang</strong><sup>†</sup>, Zehuan Yuan, Xiatian Zhu
+                                <br>
+                                arXiv:2311.01373, 2024.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2311.01373">pdf</a>&nbsp;&nbsp;<a href="https://github.com/Surrey-UPLab/Recognize-Any-Regions">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/Surrey-UPLab/Recognize-Any-Regions?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://openaccess.thecvf.com/content/ICCV2023/html/Wu_Segment_Every_Reference_Object_in_Spatial_and_Temporal_Spaces_ICCV_2023_paper.html">Segment every reference object in spatial and temporal spaces</a>
+                                <br>
+                                Jiannan Wu, <strong>Yi Jiang</strong>, Bin Yan, Huchuan Lu, Zehuan Yuan, Ping Luo
+                                <br>
+                                International Conference on Computer Vision (ICCV), 2023
+                                <br>
+                                <a href="https://openaccess.thecvf.com/content/ICCV2023/papers/Wu_Segment_Every_Reference_Object_in_Spatial_and_Temporal_Spaces_ICCV_2023_paper.pdf">pdf</a>&nbsp;&nbsp;<a href="https://github.com/FoundationVision/UniRef">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/FoundationVision/UniRef?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://openaccess.thecvf.com/content/ICCV2023/papers/Wu_Exploring_Transformers_for_Open-world_Instance_Segmentation_ICCV_2023_paper">Exploring Transformers for Open-world Instance Segmentation</a>
+                                <br>
+                                Jiannan Wu, <strong>Yi Jiang</strong>, Bin Yan, Huchuan Lu, Zehuan Yuan, Ping Luo
+                                <br>
+                                International Conference on Computer Vision (ICCV), 2023
+                                <br>
+                                <a href="https://openaccess.thecvf.com/content/ICCV2023/papers/Wu_Exploring_Transformers_for_Open-world_Instance_Segmentation_ICCV_2023_paper">pdf</a>
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2304.02012">EGC: Image Generation and Classification via a Diffusion Energy-Based Model</a>
+                                <br>
+                                Qiushan Guo, Chuofan Ma, <strong>Yi Jiang</strong>, Zehuan Yuan, Yizhou Yu, Ping Luo
+                                <br>
+                                International Conference on Computer Vision (ICCV), 2023
+                                <br>
+                                <a href="https://arxiv.org/pdf/2304.02012">pdf</a>&nbsp;&nbsp;<a href="https://guoqiushan.github.io/egc.github.io/">Project</a>&nbsp;&nbsp;<a href="https://github.com/GuoQiushan/EGC">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/GuoQiushan/EGC?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2303.06674">UNINEXT : Universal Instance Perception as Object Discovery and Retrieval</a>
+                                <br>
+                                Bin Yan, <strong>Yi Jiang</strong><sup>†</sup>, Jiannan Wu, Dong Wang, Ping Luo, Zehuan Yuan, Huchuan Lu
+                                <br>
+                                IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2023.
+                                <br>
+                                <b style="color: red">UNINEXT unifies 10 instance perception tasks and achieves state of the art performance using a single model with the same model parameters.</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2303.06674">pdf</a>&nbsp;&nbsp;<a href="https://github.com/MasterBin-IIAU/UNINEXT">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/MasterBin-IIAU/UNINEXT?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2303.08132">InstMove: Instance Motion for Object-centric Video Segmentation</a>
+                                <br>
+                                Qihao Liu*, Junfeng Wu*, <strong>Yi Jiang</strong>, Xiang Bai, Alan Yuille, Song Bai
+                                <br>
+                                IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2023.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2303.08132">pdf</a>&nbsp;&nbsp;<a href="https://github.com/wjf5203/VNext">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/wjf5203/VNext?style=social">
+                            </p>
+                        </li>
+                        
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2301.03580">Spark : Designing BERT for Convolutional Networks: Sparse and Hierarchical Masked Modeling</a>
+                                <br>
+                                Keyu Tian, <strong>Yi Jiang</strong><sup>†</sup>†, Qishuai Diao, Chen Lin, Liwei Wang, Zehuan Yuan
+                                <br>
+                                International Conference on Learning Representations (ICLR), 2023<b style="color: red"> [Spotlight, notable-top-25% of Accepted Papers].</b>
+                                <br>
+                                <b style="color: red">Spark is the first successful BERT/MAE-style pretraining on any convolutional networks.</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2301.03580">pdf</a>&nbsp;&nbsp;<a href="https://github.com/keyu-tian/SparK">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/keyu-tian/SparK?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2211.14843">Learning Object-Language Alignments for Open-Vocabulary Object Detection</a>
+                                <br>
+                                Chuang Lin, Peize Sun, <strong>Yi Jiang</strong>, Ping Luo, Lizhen Qu, Gholamreza Haffari, Zehuan Yuan, Jianfei Cai
+                                <br>
+                                International Conference on Learning Representations (ICLR), 2023
+                                <br>
+                                <a href="https://arxiv.org/pdf/2211.14843">pdf</a>&nbsp;&nbsp;<a href="https://github.com/clin1223/VLDet">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/clin1223/VLDet?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2304.02010">Multi-Level Contrastive Learning for Dense Prediction Task</a>
+                                <br>
+                                Qiushan Guo, Yizhou Yu, <strong>Yi Jiang</strong>, Jiannan Wu, Zehuan Yuan, Ping Luo
+                                <br>
+                                arXiv:2304.02010, 2023
+                                <br>
+                                <a href="https://arxiv.org/pdf/2304.02010">pdf</a>&nbsp;&nbsp;<a href="https://github.com/GuoQiushan/MCL">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/GuoQiushan/MCL?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2210.04154">Self-supervised Video Representation Learning with Motion-Aware Masked Autoencoders</a>
+                                <br>
+                                Haosen Yang, Deng Huang, Bin Wen, Jiannan Wu, Hongxun Yao, <strong>Yi Jiang</strong>, Xiatian Zhu, Zehuan Yuan
+                                <br>
+                                arXiv:2210.04154, 2022
+                                <br>
+                                <a href="https://arxiv.org/pdf/2210.04154">pdf</a>&nbsp;&nbsp;<a href="https://github.com/happy-hsy/MotionMAE">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/happy-hsy/MotionMAE?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2209.12797">Rethinking Resolution in the Context of Efficient Video Recognition</a>
+                                <br>
+                                Chuofan Ma, Qiushan Guo, <strong>Yi Jiang</strong><sup>†</sup>, Zehuan Yuan, Ping Luo, Xiaojuan Qi
+                                <br>
+                                Neural Information Processing Systems (NeurIPS), 2022.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2209.12797">pdf</a>&nbsp;&nbsp;<a href="https://github.com/CVMI-Lab/ResKD">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/CVMI-Lab/ResKD?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2207.07078">Unicorn 🦄 : Towards Grand Unification of Object Tracking</a>
+                                <br>
+                                Bin Yan, <strong>Yi Jiang</strong><sup>†</sup>, Peize Sun, Dong Wang, Zehuan Yuan, Ping Luo, Huchuan Lu
+                                <br>
+                                European Conference on Computer Vision (ECCV), 2022.<b style="color: red"> [Oral, Presentation Top 2.7%].</b>
+                                <br>
+                                <b style="color: red">For the first time, we accomplish the great unification of various object tracking task with unify network architecture and learning paradigm.</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2207.07078">pdf</a>&nbsp;&nbsp;<a href="https://github.com/MasterBin-IIAU/Unicorn">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/MasterBin-IIAU/Unicorn?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2207.10661">In Defense of Online Models for Video Instance Segmentation</a>
+                                <br>
+                                Junfeng Wu, QiHao Liu, <strong>Yi Jiang</strong>, Song Bai, Alan Yuille, Xiang Bai
+                                <br>
+                                European Conference on Computer Vision (ECCV), 2022.<b style="color: red"> [Oral, Presentation Top 2.7%].</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2207.10661">pdf</a>&nbsp;&nbsp;<a href="https://github.com/wjf5203/VNext">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/wjf5203/VNext?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2112.08275">SeqFormer: Sequential Transformer for Video Instance Segmentation</a>
+                                <br>
+                                Junfeng Wu, <strong>Yi Jiang</strong>, Song Bai, Wenqing Zhang, Xiang Bai
+                                <br>
+                                European Conference on Computer Vision (ECCV), 2022.<b style="color: red"> [Oral, Presentation Top 2.7%].</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2112.08275">pdf</a>&nbsp;&nbsp;<a href="https://github.com/wjf5203/VNext">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/wjf5203/VNext?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2111.05759">Multimodal Transformer with Variable-length Memory for Vision-and-Language Navigation</a>
+                                <br>
+                                Chuang Lin, <strong>Yi Jiang</strong>, Jianfei Cai, Lizhen Qu, Gholamreza Haffari, Zehuan Yuan
+                                <br>
+                                European Conference on Computer Vision (ECCV), 2022.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2111.05759">pdf</a>&nbsp;&nbsp;<a href="https://github.com/clin1223/MTVM">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/clin1223/MTVM?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2110.06864">ByteTrack: Multi-Object Tracking by Associating Every Detection Box</a>
+                                <br>
+                                Yifu Zhang, Peize Sun, <strong>Yi Jiang</strong>, Dongdong Yu, Fucheng Weng, Zehuan Yuan, Ping Luo, Wenyu Liu, Xinggang Wang
+                                <br>
+                                European Conference on Computer Vision (ECCV), 2022.
+                                <br>
+                                <b style="color: red">ByteTrack ranks 1th of the most influential papers in ECCV 2022.</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2110.06864">pdf</a>&nbsp;&nbsp;<a href="https://github.com/ifzhang/ByteTrack">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/ifzhang/ByteTrack?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2201.00487">Language as Queries for Referring Video Object Segmentation</a>
+                                <br>
+                                Jiannan Wu, <strong>Yi Jiang</strong>, Peize Sun, Zehuan Yuan, Ping Luo
+                                <br>
+                                IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2022.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2201.00487">pdf</a>&nbsp;&nbsp;<a href="https://github.com/wjn922/ReferFormer">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/wjn922/ReferFormer?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2111.14690">DanceTrack: Multi-Object Tracking in Uniform Appearance and Diverse Motion</a>
+                                <br>
+                                Peize Sun, Jinkun Cao, <strong>Yi Jiang</strong>, Zehuan Yuan, Song Bai, Kris Kitani, Ping Luo
+                                <br>
+                                IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2022.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2111.14690">pdf</a>&nbsp;&nbsp;<a href="https://github.com/DanceTrack/DanceTrack">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/DanceTrack/DanceTrack?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2203.02751">MetaFormer: A Unified Meta Framework for Fine-Grained Recognition</a>
+                                <br>
+                                Qishuai Diao, <strong>Yi Jiang</strong>, Bin Wen, Jia Sun, Zehuan Yuan
+                                <br>
+                                arXiv:2203.02751, 2022
+                                <br>
+                                <a href="https://arxiv.org/pdf/2203.02751">pdf</a>&nbsp;&nbsp;<a href="https://github.com/dqshuai/MetaFormer">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/dqshuai/MetaFormer?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2110.02687">Objects in Semantic Topology</a>
+                                <br>
+                                Shuo Yang, Peize Sun, <strong>Yi Jiang</strong>, Xiaobo Xia, Ruiheng Zhang, Zehuan Yuan, Changhu Wang, Ping Luo, Min Xu
+                                <br>
+                                International Conference on Learning Representations (ICLR), 2022
+                                <br>
+                                <a href="https://arxiv.org/pdf/2110.02687">pdf</a>&nbsp;&nbsp;
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2012.05780">What Makes for End-to-End Object Detection?</a>
+                                <br>
+                                Peize Sun, <strong>Yi Jiang</strong>, Enze Xie, Wenqi Shao, Zehuan Yuan, Changhu Wang, Ping Luo
+                                <br>
+                                International Conference on Machine Learning (ICML), 2021
+                                <br>
+                                <a href="https://arxiv.org/pdf/2012.05780">pdf</a>&nbsp;&nbsp;<a href="https://github.com/PeizeSun/OneNet">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/PeizeSun/OneNet?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2011.12450">Sparse R-CNN: End-to-End Object Detection with Learnable Proposals</a>
+                                <br>
+                                Peize Sun*, Rufeng Zhang*, <strong>Yi Jiang</strong>*, Tao Kong, Chenfeng Xu, Wei Zhan, Masayoshi Tomizuka, Lei Li, Zehuan Yuan, Changhu Wang, Ping Luo
+                                <br>
+                                IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2021.
+                                IEEE transactions on pattern analysis and machine intelligence (T-PAMI), 2023
+                                <br>
+                                <b style="color: red">Sparse R-CNN is integrated into several famous frameworks(Detectron2, MMDetection, PaddlePaddle)</b>
+                                <br>
+                                <a href="https://arxiv.org/pdf/2011.12450">pdf</a>&nbsp;&nbsp;<a href="https://github.com/PeizeSun/SparseR-CNN">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/PeizeSun/SparseR-CNN?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2012.15460">TransTrack: Multiple Object Tracking with Transformer</a>
+                                <br>
+                                Peize Sun, Jinkun Cao, <strong>Yi Jiang</strong>, Rufeng Zhang, Enze Xie, Zehuan Yuan, Changhu Wang, Ping Luo
+                                <br>
+                                arXiv:2012.15460, 2021.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2012.15460">pdf</a>&nbsp;&nbsp;<a href="https://github.com/PeizeSun/TransTrack">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/PeizeSun/TransTrack?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://ieeexplore.ieee.org/document/9619945">Single person dense pose estimation via geometric equivariance consistency</a>
+                                <br>
+                                Qinchuan Zhang, <strong>Yi Jiang</strong>, Qin Zhou, Yiru Zhao, Yao Liu, Hongtao Lu, Xian-Sheng Hua
+                                <br>
+                                IEEE Transactions on Multimedia (TMM), 2021
+                                <br>
+                                <a href="https://ieeexplore.ieee.org/document/9619945">pdf</a>&nbsp;&nbsp;
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/2004.00900">Learning to Segment the Tail</a>
+                                <br>
+                                Xinting Hu, <strong>Yi Jiang</strong>, Kaihua Tang, Jingyuan Chen, Chunyan Miao, Hanwang Zhang
+                                <br>
+                                IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
+                                <br>
+                                <a href="https://arxiv.org/pdf/2004.00900">pdf</a>&nbsp;&nbsp;<a href="https://github.com/JoyHuYY1412/LST_LVIS">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/JoyHuYY1412/LST_LVIS?style=social">
+                            </p>
+                        </li>
+
+                        <li>
+                            <p>
+                                <a style="font-weight: bold;" href="https://arxiv.org/abs/1903.05831">SimpleDet - A Simple and Versatile Framework for Object Detection and Instance Recognition</a>
+                                <br>
+                                Yuntao Chen, Chenxia Han, Yanghao Li, Zehao Huang, <strong>Yi Jiang</strong>, Naiyan Wang
+                                <br>
+                                Journal of Machine Learning Research (JMLR), 2019
+                                <br>
+                                <a href="https://arxiv.org/pdf/1903.05831">pdf</a>&nbsp;&nbsp;<a href="https://github.com/Jtusen-ai/simpledet">code</a>
+                                <img alt="GitHub stars" style="vertical-align:middle" src="https://img.shields.io/github/stars/tusen-ai/simpledet?style=social">
+                            </p>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
 
 
-    <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/codet_nips2023.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://enjoyyi.github.io/">
-              <papertitle><b>CoDet: Co-Occurrence Guided Region-Word Alignment for Open-Vocabulary Object Detection</b></papertitle>
-              </a>
-              <br>
-              Chuofan Ma, <b>Yi Jiang</b><sup>†</sup>, Xin Wen,Zehuan Yuan, Xiaojuan Qi.              
-              <br>
-              <em>Advances in Neural Information Processing Systems(<b>NeurIPS</b>)</em>, 2023
-              <br>
-              <a href="https://enjoyyi.github.io/"; style="color: #EE7F2D;">Paper</a>
-              <p></p>
-            </td><tr> 
-
-    <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/uniref_ICCV2023.png" style="height: 120px; width: 270px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://openaccess.thecvf.com/content/ICCV2023/papers/Wu_Segment_Every_Reference_Object_in_Spatial_and_Temporal_Spaces_ICCV_2023_paper.pdf">
-              <papertitle><b>Segment Every Reference Object in Spatial and Temporal Spaces</b></papertitle>
-              </a>
-              <br>
-              Jiannan Wu, <b>Yi Jiang</b>, Bin Yan, Huchuan Lu, Zehuan Yuan, Ping Luo.              
-              <br>
-              <em>International Conference on Computer Vision (<b>ICCV</b>)</em>, 2023
-              <br>
-              <a href="https://openaccess.thecvf.com/content/ICCV2023/papers/Wu_Segment_Every_Reference_Object_in_Spatial_and_Temporal_Spaces_ICCV_2023_paper.pdf"; style="color: #EE7F2D;">Paper</a>
-              <p></p>
-            </td><tr> 
-
-    <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/sword_ICCV2023.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2308.04206.pdf">
-              <papertitle><b>Exploring Transformers for Open-world Instance Segmentation</b></papertitle>
-              </a>
-              <br>
-              Jiannan Wu, <b>Yi Jiang</b>, Bin Yan, Huchuan Lu, Zehuan Yuan, Ping Luo.              
-              <br>
-              <em>International Conference on Computer Vision (<b>ICCV</b>)</em>, 2023
-              <br>
-              <a href="https://arxiv.org/abs/2308.04206"; style="color: #EE7F2D;">Paper</a>
-              <p></p>
-            </td><tr> 
-
-    <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/EGC_arxiv_2023.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2304.02012.pdf">
-              <papertitle><b>EGC: Image Generation and Classification via a Diffusion Energy-Based Model</b></papertitle>
-              </a>
-              <br>
-              Qiushan Guo, Chuofan Ma, <b>Yi Jiang</b>, Zehuan Yuan, Yizhou Yu, Ping Luo.              
-              <br>
-              <em>International Conference on Computer Vision (<b>ICCV</b>)</em>, 2023
-              <br>
-              <a href="https://arxiv.org/abs/2304.02012"; style="color: #EE7F2D;">Paper</a>
-              /
-              <a href="https://guoqiushan.github.io/egc.github.io/"; style="color: #EE7F2D;">Project</a>
-              <p></p>
-            </td><tr> 
-
-	    <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/UNINEXT_CVPR2023.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2303.06674.pdf">
-              <papertitle><b>UNINEXT : Universal Instance Perception as Object Discovery and Retrieval</b></papertitle>
-              </a>
-              <br>
-	      Bin Yan, <b>Yi Jiang</b><sup>†</sup>, Jiannan Wu, Dong Wang, Ping Luo, Zehuan Yuan, Huchuan Lu
-              <br>
-              <em>Computer Vision and Pattern Recognition (<b>CVPR</b>)</em>, 2023
-              <br>
-	      <a href="https://arxiv.org/abs/2303.06674"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/MasterBin-IIAU/UNINEXT"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/MasterBin-IIAU/UNINEXT.svg" alt="GitHub stars" title="" />
-
-              <br>
-        <b style="color: red">UNINEXT unifies 10 instance perception tasks and achieves state of the art performance using a single model with the same model parameters.</b>
-              <br>
-            </td><tr>
-
-			
-      <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/InstMove_CVPR2023.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2303.08132.pdf">
-              <papertitle><b>InstMove: Instance Motion for Object-centric Video Segmentation</b></papertitle>
-              </a>
-              <br>
-        Qihao Liu, Junfeng Wu, <b>Yi Jiang</b>, Xiang Bai, Alan Yuille, Song Bai
-              <br>
-              <em>Computer Vision and Pattern Recognition (<b>CVPR</b>)</em>, 2023
-              <br>
-        <a href="https://arxiv.org/abs/2303.08132"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/wjf5203/vNext"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/wjf5203/vNext.svg" alt="GitHub stars" title="" />
-            </td><tr>
-	    
-      <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/Spark_ICLR2023.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://openreview.net/pdf?id=NRxydtWup1S">
-              <papertitle><b>Spark : Designing BERT for Convolutional Networks: Sparse and Hierarchical Masked Modeling</b></papertitle>
-              </a>
-              <br>
-        Keyu Tian, <b>Yi Jiang</b><sup>†</sup>, Qishuai Diao, Chen Lin, Liwei Wang, Zehuan Yuan
-              <br>
-              <em>International Conference on Learning Representations (<b>ICLR</b>)</em>, 2023 <b style="color: red">[Spotlight notable-top-25% of Accepted Papers]</b> 
-              <br>
-        <a href="https://openreview.net/forum?id=NRxydtWup1S"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/keyu-tian/SparK"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/keyu-tian/SparK.svg" alt="GitHub stars" title="" />
-            <br>
-        <b style="color: red">Spark is the first successful BERT/MAE-style pretraining on any convolutional networks</b>
-              <br>
-            </td><tr>
-
-      
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/VLDet_ICLR2023.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2211.14843.pdf">
-              <papertitle><b>Learning Object-Language Alignments for Open-Vocabulary Object Detection,</b></papertitle>
-              </a>
-              <br>
-        Chuang Lin, Peize Sun,  <b>Yi Jiang</b>, Ping Luo, Lizhen Qu, Gholamreza Haffari, Zehuan Yuan, Jianfei Cai
-              <br>
-              <em>International Conference on Learning Representations (<b>ICLR</b>)</em>, 2023
-              <br>
-        <a href="https://arxiv.org/abs/2211.14843"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/clin1223/VLDet"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/clin1223/VLDet.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/reskd_nips2022.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://openreview.net/pdf?id=rnJzy8JnaX">
-              <papertitle><b>Rethinking Resolution in the Context of Efficient Video Recognition</b></papertitle>
-              </a>
-              <br>
-        Chuofan Ma, Qiushan Guo, <b>Yi Jiang</b><sup>†</sup>, Zehuan Yuan, Ping Luo, Xiaojuan Qi<sup>†</sup>
-              <br>
-              <em>Advances in Neural Information Processing Systems (<b>NeurIPS</b>)</em>, 2022
-              <br>
-        <a href="https://arxiv.org/abs/2209.12797"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/CVMI-Lab/ResKD"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/CVMI-Lab/ResKD.svg" alt="GitHub stars" title="" />
-            </td><tr>
-	
-		    
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/Unicorn_ECCV2022.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2207.07078.pdf">
-              <papertitle><b>Unicorn 🦄 : Towards Grand Unification of Object Tracking</b></papertitle>
-              </a>
-              <br>
-        Bin Yan, <b>Yi Jiang</b><sup>†</sup>, Peize Sun, Dong Wang, Zehuan Yuan, Ping Luo, Huchuan Lu
-              <br>
-              <em>European Conference on Computer Vision (<b>ECCV</b>)</em>, 2022 <b style="color: red">[Oral Presentation Top 2.7%]</b> 
-              <br>
-        <a href="https://arxiv.org/abs/2207.07078"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/MasterBin-IIAU/Unicorn"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/MasterBin-IIAU/Unicorn.svg" alt="GitHub stars" title="" />
-              <br>
-        <b style="color: red">For the first time, we accomplish the great unification of various object tracking task with unify network architecture and learning paradigm</b>
-              <br>
-            </td><tr>
-
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/idol_ECCV2022.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2207.10661.pdf">
-              <papertitle><b>In Defense of Online Models for Video Instance Segmentation</b></papertitle>
-              </a>
-              <br>
-        Junfeng Wu, QiHao Liu, <b>Yi Jiang</b>, Song Bai, Alan Yuille, Xiang Bai
-              <br>
-              <em>European Conference on Computer Vision (<b>ECCV</b>)</em>, 2022 <b style="color: red">[Oral Presentation Top 2.7%]</b> 
-              <br>
-        <a href="https://arxiv.org/abs/2207.10661"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/wjf5203/vNext"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/wjf5203/vNext.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/seqformer_ECCV2022.png" style="height: 150px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2112.08275.pdf">
-              <papertitle><b>SeqFormer: Sequential Transformer for Video Instance Segmentation</b></papertitle>
-              </a>
-              <br>
-        Junfeng Wu, <b>Yi Jiang</b>, Song Bai, Wenqing Zhang, Xiang Bai
-              <br>
-              <em>European Conference on Computer Vision (<b>ECCV</b>)</em>, 2022 <b style="color: red">[Oral Presentation Top 2.7%]</b> 
-              <br>
-        <a href="https://arxiv.org/abs/2112.08275"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/wjf5203/vNext"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/wjf5203/vNext.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/mtvm_ECCV2022.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2111.05759.pdf">
-              <papertitle><b>Multimodal Transformer with Variable-length Memory for Vision-and-Language Navigation</b></papertitle>
-              </a>
-              <br>
-        Chuang Lin, <b>Yi Jiang</b><sup>†</sup>, Jianfei Cai, Lizhen Qu, Gholamreza Haffari, Zehuan Yuan
-              <br>
-              <em>European Conference on Computer Vision (<b>ECCV</b>)</em>, 2022
-              <br>
-        <a href="https://arxiv.org/abs/2111.05759"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/clin1223/MTVM"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/clin1223/MTVM.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/bytetrack_vis_ECCV2022.png" style="height: 150px; width: 270px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2110.06864.pdf">
-              <papertitle><b>ByteTrack: Multi-Object Tracking by Associating Every Detection Box</b></papertitle>
-              </a>
-              <br>
-        Yifu Zhang, Peize Sun, <b>Yi Jiang</b>, Dongdong Yu, Fucheng Weng, Zehuan Yuan, Ping Luo, Wenyu Liu, Xinggang Wang
-              <br>
-              <em>European Conference on Computer Vision (<b>ECCV</b>)</em>, 2022
-              <br>
-        <a href="https://arxiv.org/abs/2111.05759"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/ifzhang/ByteTrack"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/ifzhang/ByteTrack.svg" alt="GitHub stars" title="" />
-              <br>
-        <b style="color: red">ByteTrack ranks 1th of the most influential papers in ECCV 2022. </b>
-              <br>
-            </td><tr>
-
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/referformer_CVPR2022.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2201.00487.pdf">
-              <papertitle><b>Language as Queries for Referring Video Object Segmentation</b></papertitle>
-              </a>
-              <br>
-        Jiannan Wu, <b>Yi Jiang</b>, Peize Sun, Zehuan Yuan, Ping Luo
-              <br>
-              <em>Computer Vision and Pattern Recognition (<b>CVPR</b>)</em>, 2022
-              <br>
-        <a href="https://arxiv.org/abs/2201.00487"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/wjn922/ReferFormer"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/wjn922/ReferFormer.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/dancetrack_CVPR2022.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2111.14690.pdf">
-              <papertitle><b>DanceTrack: Multi-Object Tracking in Uniform Appearance and Diverse Motion</b></papertitle>
-              </a>
-              <br>
-        Peize Sun, Jinkun Cao, <b>Yi Jiang</b>, Zehuan Yuan, Song Bai, Kris Kitani, Ping Luo
-              <br>
-              <em>Computer Vision and Pattern Recognition (<b>CVPR</b>)</em>, 2022
-              <br>
-        <a href="https://arxiv.org/abs/2111.14690"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/DanceTrack/DanceTrack"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/DanceTrack/DanceTrack.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/topology_ICLR2022.png" style="height: 140px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/abs/2110.02687">
-              <papertitle><b>Objects in Semantic Topology</b></papertitle>
-              </a>
-              <br>
-        Shuo Yang, Peize Sun, <b>Yi Jiang</b>, Xiaobo Xia, Ruiheng Zhang, Zehuan Yuan, Changhu Wang, Ping Luo, Min Xu
-              <br>
-              <em>International Conference on Learning Representations (<b>ICLR</b>)</em>, 2022
-              <br>
-        <a href="https://arxiv.org/abs/2110.02687"; style="color: #EE7F2D;">Paper</a>
-        </td><tr>
-
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/onenet_ICML2021.png" style="height: 150px; width: 250px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2012.05780.pdf">
-              <papertitle><b>What Makes for End-to-End Object Detection?</b></papertitle>
-              </a>
-              <br>
-              Peize Sun, <b>Yi Jiang</b>, Enze Xie, Wenqi Shao, Zehuan Yuan, Changhu Wang, Ping Luo
-              <br>
-              <em>International Conference on Machine Learning (<b>ICML</b>)</em>, 2021
-              <br>
-        <a href="https://arxiv.org/abs/2012.05780"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/PeizeSun/OneNet"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/PeizeSun/OneNet.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-          <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/sparsercnn_CVPR2021.png" style="height: 100px; width: 320px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2011.12450.pdf">
-              <papertitle><b>Sparse R-CNN: End-to-End Object Detection with Learnable Proposals</b></papertitle>
-              </a>
-              <br>
-              Peize Sun<sup>*</sup>, Rufeng Zhang<sup>*</sup>, <b>Yi Jiang</b><sup>*</sup>, Tao Kong, Chenfeng Xu, Wei Zhan, Masayoshi Tomizuka, Lei Li, Zehuan Yuan, Changhu Wang, Ping Luo
-              <br>
-              <em>Computer Vision and Pattern Recognition (<b>CVPR</b>)</em>, 2021
-              <br>
-        <a href="https://arxiv.org/abs/2011.12450"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/PeizeSun/SparseR-CNN"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/PeizeSun/SparseR-CNN.svg" alt="GitHub stars" title="" />
-            </td><tr>
+        <div class="sect1">
+            <h2 id="_honors_and_awards">Honors and Awards</h2>
+            <div class="sectionbody">
+                <div class="ulist">
+                    <ul>
+                        <li>
+                            <p>
+                                Winner of CVPR 2022 Large-scale Video Object Segmentation Challenge: Video Instance Segmentation
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Runner up of CVPR 2021 FGVC8 iNaturalist Challenge
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Runner up of ICCV 2019 WIDER Face and Person Challenge: Face Detection
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Excellent Mentor Award, ByteDance 2021
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Outstanding Staff Award, Bytedance 2020, 2024
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Competition Master in kaggle 2018
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="sect1">
+            <h2 id="_professional_activities">Professional Activities</h2>
+            <div class="sectionbody">
+                <div class="olist arabic">
+                    <ul class="arabic">
+                        <li>
+                            <p>
+                                Conference Reviewer: CVPR, ICCV, ECCV, ICLR, NeurIPS, ACM MM
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Journal Reviewer: T-PAMI, TIP, PR, TMM
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                Workshop Organizer: <a href="https://motcomplex.github.io/";> <b>ECCV 2022 Workshop: Multiple Object Tracking and Segmentation in Complex Environments</b></a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="footer">
+        <div id="footer-text">
+        </div>
+    </div>
 
 
 
-          <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/densepose_TMM.png" style="height: 150px; width: 280px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://ieeexplore.ieee.org/document/9619945">
-              <papertitle><b>Single person dense pose estimation via geometric equivariance consistency</b></papertitle>
-              </a>
-              <br>
-              Qinchuan Zhang, <b>Yi Jiang</b>, Qin Zhou, Yiru Zhao, Yao Liu, Hongtao Lu, Xian-Sheng Hua
-              <br>
-              <em>IEEE Transactions on Multimedia (<b>TMM</b>)</em>, 2021
-              <br>
-        <a href="https://ieeexplore.ieee.org/document/9619945"; style="color: #EE7F2D;">Paper</a>
-        </td><tr>
-
-
-          <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/lst_CVPR2020.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2004.00900.pdf">
-              <papertitle><b>Learning to Segment the Tail</b></papertitle>
-              </a>
-              <br>
-              Xinting Hu, <b>Yi Jiang</b>, Kaihua Tang, Jingyuan Chen, Chunyan Miao, Hanwang Zhang
-              <br>
-              <em>Computer Vision and Pattern Recognition (<b>CVPR</b>)</em>, 2020
-              <br>
-        <a href="https://arxiv.org/abs/2004.00900"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/JoyHuYY1412/LST_LVIS"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/JoyHuYY1412/LST_LVIS.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-	     
-        <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/simpledet_JMLR.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/1903.05831.pdf">
-              <papertitle><b>SimpleDet - A Simple and Versatile Framework for Object Detection and Instance Recognition</b></papertitle>
-              </a>
-              <br>
-              Yuntao Chen, Chenxia Han, Yanghao Li, Zehao Huang, <b>Yi Jiang</b>, Naiyan Wang, Zhaoxiang Zhang
-              <br>
-              <em>Journal of Machine Learning Research (<b>JMLR</b>)</em>, 2019
-              <br>
-        <a href="https://arxiv.org/abs/1903.05831"; style="color: #EE7F2D;">Paper</a>
-        /
-              <a href="https://github.com/tusen-ai/simpledet"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/tusen-ai/simpledet.svg" alt="GitHub stars" title="" />
-            </td><tr>
-
-						       
-</table></p>
-
-
-<p style="text-align:justify"><strong><font size="4px">Preprints</font></strong> (* equal contribution, <sup>†</sup> corresponding author)
-    <table id="pubList" border="0" cellpadding="0" width="100%" style="border-spacing: 10 18px; line-height:16pt; border: 0px;">
-      
-      
-     <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/MCL_1_arxiv_2023.png" style="height: 90px; width: 320px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2304.02010.pdf">
-              <papertitle><b>Multi-Level Contrastive Learning for Dense Prediction Task</b></papertitle>
-              </a>
-              <br>
-              Qiushan Guo, Yizhou Yu, <b>Yi Jiang</b>, Jiannan Wu, Zehuan Yuan, and Ping Luo.              
-              <br>
-              <em>arXiv</em>, 2023
-              <br>
-              <a href="https://arxiv.org/abs/2304.02010"; style="color: #EE7F2D;">arXiv</a>
-              /
-              <a href="https://github.com/GuoQiushan/MCL"; style="color: #EE7F2D;">Code</a>
-              <p></p>
-            </td><tr> 
-
-     <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/motionMAE_arxiv_2022.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2210.04154.pdf">
-              <papertitle><b>Self-supervised Video Representation Learning with Motion-Aware Masked Autoencoders</b></papertitle>
-              </a>
-              <br>
-              Haosen Yang, Deng Huang, Bin Wen, Jiannan Wu, Hongxun Yao, <b>Yi Jiang</b><sup>†</sup>, Xiatian Zhu, Zehuan Yuan              
-              <br>
-              <em>arXiv</em>, 2022
-              <br>
-              <a href="https://arxiv.org/abs/2210.04154"; style="color: #EE7F2D;">arXiv</a>
-              /
-              <a href="https://github.com/happy-hsy/MotionMAE"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/happy-hsy/MotionMAE" alt="GitHub stars" title="" />
-              <p></p>
-            </td><tr>
-
-
-      <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/MetaFormer_arxiv_2022.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2203.02751.pdf">
-              <papertitle><b>MetaFormer: A Unified Meta Framework for Fine-Grained Recognition</b></papertitle>
-              </a>
-              <br>
-              Qishuai Diao, <b>Yi Jiang</b><sup>†</sup>, Bin Wen, Jia Sun, Zehuan Yuan              
-              <br>
-              <em>arXiv</em>, 2022
-              <br>
-              <a href="https://arxiv.org/abs/2203.02751"; style="color: #EE7F2D;">arXiv</a>
-              /
-              <a href="https://github.com/dqshuai/MetaFormer"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/dqshuai/MetaFormer.svg" alt="GitHub stars" title="" />
-              <p></p>
-            </td><tr> 
-
-      <td style="padding:20px;width:25%;vertical-align:middle">
-            <img src="./photos/TransTrack_arxiv_2021.png" style="height: 120px; width: 300px; margin-top: 10px">
-            <td style="padding:10px;width:75%;vertical-align:middle">
-              <a href="https://arxiv.org/pdf/2012.15460.pdf">
-              <papertitle><b>TransTrack: Multiple Object Tracking with Transformer</b></papertitle>
-              </a>
-              <br>
-              Peize Sun, Jinkun Cao, <b>Yi Jiang</b>, Rufeng Zhang, Enze Xie, Zehuan Yuan, Changhu Wang, Ping Luo              
-              <br>
-              <em>arXiv</em>, 2020
-              <br>
-              <a href="https://arxiv.org/abs/2012.15460"; style="color: #EE7F2D;">arXiv</a>
-              /
-              <a href="https://github.com/PeizeSun/TransTrack"; style="color: #EE7F2D;">Code</a>
-              <img style="border: 0px;padding: 0px;border-radius: 5px;" src="https://img.shields.io/github/stars/PeizeSun/TransTrack.svg" alt="GitHub stars" title="" />
-              <p></p>
-            </td><tr> 
-      
-        </table></p>
-		
-	<p style="text-align:left"><strong><font size="4px">Awards</font></strong></p>
-		<ul>
-		    <li><p style="text-align:left">Winner of CVPR 2022 Large-scale Video Object Segmentation Challenge: Video Instance Segmentation</p></li>
-        <li><p style="text-align:left">Runner up of CVPR 2021 FGVC8 iNaturalist Challenge</p></li>
-        <li><p style="text-align:left">Runner up of ICCV 2019 WIDER Face and Person Challenge: Face Detection</p></li>
-  			<li><p style="text-align:left">Excellent Mentor Award, ByteDance 2021</p></li>
-        <li><p style="text-align:left">Outstanding Staff Award, Bytedance 2020</p></li>
-        <li><p style="text-align:left">Competition Master in kaggle 2018</p></li>
-		</ul><br>
-
-	<p style="text-align:justify"><strong><font size="4px">Professional activities</font></strong></p>
-		<ul>
-      <li><p style="text-align:left">Main Organizer for <a href="https://motcomplex.github.io/"; style="color: #EE7F2D;"> <b>ECCV 2022 Workshop: Multiple Object Tracking and Segmentation in Complex Environments</b></a> </p></li>
-			<li><p style="text-align:left">Reviewer for CVPR, ICCV, ECCV, NIPS, MM</p></li>
-			<li><p style="text-align:left">Reviewer for Trans. on Pattern Analysis and Machine Intelligence (TPAMI), IEEE Trans. on Image Processing (TIP), Pattern Recognition</p></li>
-	    </ur>
-
-<script src="script.js"></script><table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
-          <tr>
-            <td style="padding:0px">
-              <br>
-              <p style="text-align:center;font-size:small;">
-              Design and source code from <a href="https://github.com/jonbarron/jonbarron_website">Jon Barron</a>.
-              <br>
-              </p>
-            </td>
-          </tr>
-        </tbody></table>
-
-</body>          
-
-</html>
+</body></html>
